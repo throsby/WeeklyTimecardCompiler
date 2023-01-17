@@ -7,7 +7,8 @@ from reportlab.lib.pagesizes import letter
 
 
 
-weekendingDate = "January "
+weekendingDate = "January 21, 2023"
+
 
 packet = io.BytesIO()
 can = canvas.Canvas(packet, pagesize=letter)
