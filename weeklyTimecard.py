@@ -5,6 +5,10 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
+
+
+weekendingDate = "January "
+
 packet = io.BytesIO()
 can = canvas.Canvas(packet, pagesize=letter)
 can.drawString(10, 100, "Hello world")
