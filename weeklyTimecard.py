@@ -14,18 +14,7 @@ def createBoxRental():
     can = canvas.Canvas(packet, pagesize=letter)
 
     can.grid([x for x in range(700) if x % 20==0],[x for x in range(850) if x % 20==0])
-    can.drawString(10, 10, ". (10, 10)")
-    can.drawString(100, 10, ". (100, 10)")
-    can.drawString(150, 10, ". (150, 10)")
-    can.drawString(200, 10, ". (200, 10)")
-    can.drawString(250, 10, ". (250, 10)")
-    can.drawString(300, 10, ". (300, 10)")
-    can.drawString(350, 10, ". (350, 10)")
-    can.drawString(400, 10, ". (400, 10)")
-    can.drawString(450, 10, ". (450, 10)")
-    can.drawString(500, 10, ". (500, 10)")
-    can.drawString(550, 10, ". (550, 10)")
-    can.drawString(600, 10, ". (600, 10)")
+    
 
     can.drawString(100, 100, ". (100, 100)")
 
