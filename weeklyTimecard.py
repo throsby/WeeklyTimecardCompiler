@@ -73,10 +73,23 @@ def createTimeCard():
             can.drawString(23, 430 - daysOfWeekWorked, "NY   NY")
             can.setFontSize(10)
             can.drawString(120, 430 - daysOfWeekWorked, "{0}/{1}/{2}".format(pair[1].month, pair[1].day, pair[1].year))
-            can.drawString(195, 430 - daysOfWeekWorked, "{}".format(pair[0]))
-            daysOfWeekWorked = daysOfWeekWorked + 23    
+            
+            combined = datetime.combine(pair[1],time(13, 30))+ timedelta(seconds=pair[0]*60*60)
+            print(datetime.strftime(combined, "%-H:%M%p"))
+
+            # timeWorked = timedelta(days=0,hours=pair[0])
+            # # print(timeWorked)
+            # startTime = timedelta(days=0,hours=13)
+            # print(startTime+timeWorked)
+            # timeDisplacement = datetime.combine(startTime, timeWorked)
+            # print(timeDisplacement)
+            can.drawString(191, 430 - daysOfWeekWorked, "1P     7P    7:30  {hours}".format(hours=datetime.strftime(combined, "%-H:%M%p")))
 
 
+
+            daysOfWeekWorked = daysOfWeekWorked + 23
+
+    # Location of meal allowance
     can.drawString(90, 192, "$15/day")
 
     can.save()
@@ -105,8 +118,9 @@ if __name__ == "__main__":
     import io
     from reportlab.pdfgen import canvas
     from reportlab.lib.pagesizes import letter
+    # If you want my SSN steal it from me in person
     from privateVariables import private_key
-    from datetime import date, timedelta
+    from datetime import datetime, date, timedelta, time
 
     # Create a value that is always the coming Saturday
     thisSaturdayAsDatetime = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
@@ -119,9 +133,9 @@ if __name__ == "__main__":
     tuesdayHours = 12
     wednesdayHours = 12
     thursdayHours = 12
-    fridayHours = 12
+    fridayHours = 12.5
     saturdayHours = 0
-    
+
     sundayAsDatetime = thisSaturdayAsDatetime - timedelta(days=6)
     mondayAsDatetime = thisSaturdayAsDatetime - timedelta(days=5)
     tuesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=4)
