@@ -41,8 +41,8 @@ def createTimeCard():
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
 
-    can.grid([x for x in range(801) if x % 25==0],[x for x in range(801) if x % 25==0])
-    can.grid([x+1 for x in range(801) if x % 100==0],[x+1 for x in range(801) if x % 100==0])
+    # can.grid([x for x in range(801) if x % 25==0],[x for x in range(801) if x % 25==0])
+    # can.grid([x+1 for x in range(801) if x % 100==0],[x+1 for x in range(801) if x % 100==0])
 
     # Location of name
     can.drawString(30, 505, "Throsby Wells")
@@ -54,7 +54,7 @@ def createTimeCard():
     can.drawString(455, 530, "12")
 
     # Location of guaranteed rate
-    can.drawString(525, 530, "22.41/hour")
+    can.drawString(525, 530, "21.42/hour")
 
     # Location of weekending
     can.drawString(615, 530, weekendingDate)
@@ -62,23 +62,22 @@ def createTimeCard():
     # Location of job title
     can.drawString(455, 505, "HS Coordinator")
     
-    can.drawString(24, 430, "NY   NY")
-    can.drawString(24, 405, "NY   NY")
-    can.drawString(24, 385, "NY   NY")
-    can.drawString(24, 360, "NY   NY")
-    can.drawString(24, 335, "NY   NY")
-    can.drawString(24, 312, "NY   NY")
 
-    can.drawString(120, 430, "{0}/{1}/{2}".format(thisSaturdayAsDatetime.month, thisSaturdayAsDatetime.day, thisSaturdayAsDatetime.year))
-    can.drawString(120, 405, "NY")
-    can.drawString(120, 385, "NY")
-    can.drawString(120, 360, "NY")
-    can.drawString(120, 335, "NY")
-    can.drawString(120, 312, "NY")
+
+    # Creates the different lines for times and dates
+    daysOfWeekWorked = 0
+    for pair in weeklyHoursAsDateTime:
+        print("The pair: ", pair)
+        if (pair[0] != 0):
+            can.setFontSize(12)
+            can.drawString(23, 430 - daysOfWeekWorked, "NY   NY")
+            can.setFontSize(10)
+            can.drawString(120, 430 - daysOfWeekWorked, "{0}/{1}/{2}".format(pair[1].month, pair[1].day, pair[1].year))
+            can.drawString(195, 430 - daysOfWeekWorked, "{}".format(pair[0]))
+            daysOfWeekWorked = daysOfWeekWorked + 23    
 
 
     can.drawString(90, 192, "$15/day")
-
 
     can.save()
 
@@ -107,11 +106,12 @@ if __name__ == "__main__":
     from reportlab.pdfgen import canvas
     from reportlab.lib.pagesizes import letter
     from privateVariables import private_key
-    from datetime import date
+    from datetime import date, timedelta
 
     # Create a value that is always the coming Saturday
     thisSaturdayAsDatetime = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
     
+    # Formats this Saturday as "Month DD, YYYY"
     weekendingDate = thisSaturdayAsDatetime.strftime("%B %d, %Y")
 
     sundayHours = 12
@@ -122,8 +122,25 @@ if __name__ == "__main__":
     fridayHours = 12
     saturdayHours = 0
     
-    weeklyHours = [sundayHours, mondayHours, tuesdayHours, wednesdayHours, thursdayHours, fridayHours, saturdayHours]
+    sundayAsDatetime = thisSaturdayAsDatetime - timedelta(days=6)
+    mondayAsDatetime = thisSaturdayAsDatetime - timedelta(days=5)
+    tuesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=4)
+    wednesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=3)
+    thursdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=2)
+    fridayAsDatetime = thisSaturdayAsDatetime - timedelta(days=1)
+    saturdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=0)
 
+    sunday = thisSaturdayAsDatetime.day - 6
+    monday = thisSaturdayAsDatetime.day - 5
+    tuesday = thisSaturdayAsDatetime.day - 4
+    wednesday = thisSaturdayAsDatetime.day - 3
+    thursday = thisSaturdayAsDatetime.day - 2    
+    friday = thisSaturdayAsDatetime.day - 1
+    saturday = thisSaturdayAsDatetime.day - 0
+
+    weeklyHoursAsDateTime = [(sundayHours, sundayAsDatetime), (mondayHours, mondayAsDatetime), (tuesdayHours, tuesdayAsDatetime), (wednesdayHours, wednesdayAsDatetime), (thursdayHours, thursdayAsDatetime), (fridayHours, fridayAsDatetime), (saturdayHours, saturdayAsDatetime)]
+
+    # print(weeklyHoursAsDateTime)
 
     createTimeCard()
     # createBoxRental()
