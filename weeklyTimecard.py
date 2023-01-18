@@ -47,8 +47,11 @@ if __name__ == "__main__":
     from datetime import date
     weekendingDate = "January 21, 2023"
 
-    thisSaturdayAsOrdinal = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
-    print(thisSaturdayAsOrdinal)
-    weekendingDateTimeFormat = thisSaturdayAsOrdinal.strftime("%B %w, %Y")
-    print("WeekendingFormat", weekendingDateTimeFormat)
+    # print(datetime.fromordinal(date.today().toordinal() + (5 - date.today().weekday())).strftime("%B %w, %Y"))
+
+    thisSaturdayAsDatetime = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
+    
+    weekendingDateTimeFormat = thisSaturdayAsDatetime.strftime("%B %d, %Y")
+
+
     createBoxRental()
