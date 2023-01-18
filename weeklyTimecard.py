@@ -62,35 +62,23 @@ def createTimeCard():
     # Location of job title
     can.drawString(455, 505, "HS Coordinator")
     
+    # Location of meal allowance
+    can.drawString(90, 192, "$15/day")
 
-
-    # Creates the different lines for times and dates
     daysOfWeekWorked = 0
     for pair in weeklyHoursAsDateTime:
-        print("The pair: ", pair)
         if (pair[0] != 0):
+            # Creates the different lines for times and dates
             can.setFontSize(12)
             can.drawString(23, 430 - daysOfWeekWorked, "NY   NY")
             can.setFontSize(10)
             can.drawString(120, 430 - daysOfWeekWorked, "{0}/{1}/{2}".format(pair[1].month, pair[1].day, pair[1].year))
-            
-            combined = datetime.combine(pair[1],time(13, 30))+ timedelta(seconds=pair[0]*60*60)
-            print(datetime.strftime(combined, "%-H:%M%p"))
+            # The endtime of work. Starting at 1:30PM to make lunch easier - adds the time worked for the respective day as time delta and combines the day worked with the hours worked
+            endOfWorkAsDatetime = datetime.combine(pair[1], time(13, 30)) + timedelta(seconds=pair[0]*60*60)
+            # print(datetime.strftime(endOfWorkAsDatetime, "%-H:%M%p"))
 
-            # timeWorked = timedelta(days=0,hours=pair[0])
-            # # print(timeWorked)
-            # startTime = timedelta(days=0,hours=13)
-            # print(startTime+timeWorked)
-            # timeDisplacement = datetime.combine(startTime, timeWorked)
-            # print(timeDisplacement)
-            can.drawString(191, 430 - daysOfWeekWorked, "1P     7P    7:30  {hours}".format(hours=datetime.strftime(combined, "%-H:%M%p")))
-
-
-
+            can.drawString(191, 430 - daysOfWeekWorked, "1P     7P    7:30  {hours}".format(hours=datetime.strftime(endOfWorkAsDatetime, "%-H:%M%p")))
             daysOfWeekWorked = daysOfWeekWorked + 23
-
-    # Location of meal allowance
-    can.drawString(90, 192, "$15/day")
 
     can.save()
 
@@ -106,9 +94,8 @@ def createTimeCard():
     output.addPage(page)
 
     # finally, write "output" to a real file
-    # timecardFilenameString = r"/Users/throsbywells/Desktop/Kanan Season 3 Box Rental Forms/S3 Box Rental w:e {0}-{1}-{2}.pdf".format(thisSaturdayAsDatetime.year,thisSaturdayAsDatetime.month,thisSaturdayAsDatetime.day)
-    # print(timecardFilenameString)
-    outputStream = open("destination.pdf", "wb")
+    timecardFilenameString = datetime.strftime(thisSaturdayAsDatetime, "Timecard_-_Throsby_Wells_-_x%-m-%d-%Y.pdf")
+    outputStream = open("/Users/throsbywells/Desktop/TimeCards/{}".format(timecardFilenameString), "wb")
     output.write(outputStream)
     outputStream.close()
 
@@ -133,9 +120,10 @@ if __name__ == "__main__":
     tuesdayHours = 12
     wednesdayHours = 12
     thursdayHours = 12
-    fridayHours = 12.5
+    fridayHours = 12
     saturdayHours = 0
 
+    # For clearer code to fix in a month or so, these are the datetimes of the week, as Datetimes
     sundayAsDatetime = thisSaturdayAsDatetime - timedelta(days=6)
     mondayAsDatetime = thisSaturdayAsDatetime - timedelta(days=5)
     tuesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=4)
@@ -144,6 +132,7 @@ if __name__ == "__main__":
     fridayAsDatetime = thisSaturdayAsDatetime - timedelta(days=1)
     saturdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=0)
 
+    # For clearer code to fix in a month or so, these are the dates of the week, as ints
     sunday = thisSaturdayAsDatetime.day - 6
     monday = thisSaturdayAsDatetime.day - 5
     tuesday = thisSaturdayAsDatetime.day - 4
