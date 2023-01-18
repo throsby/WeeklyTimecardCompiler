@@ -1,8 +1,5 @@
 # Most of this is taken whole-cloth from "https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python"
 def createBoxRental():
-    
-    
-
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
 
@@ -34,7 +31,9 @@ def createBoxRental():
     page.mergePage(new_pdf.getPage(0))
     output.addPage(page)
     # finally, write "output" to a real file
-    outputStream = open("destination.pdf", "wb")
+    boxrentalFilenameString = r"S3 Box Rental w:e {0}-{1}-{2}.pdf".format(thisSaturdayAsDatetime.year,thisSaturdayAsDatetime.month,thisSaturdayAsDatetime.day)
+    # print(boxrentalFilenameString)
+    outputStream = open(boxrentalFilenameString, "wb")
     output.write(outputStream)
     outputStream.close()
 
@@ -45,13 +44,20 @@ if __name__ == "__main__":
     from reportlab.lib.pagesizes import letter
     from privateVariables import private_key
     from datetime import date
-    weekendingDate = "January 21, 2023"
 
-    # print(datetime.fromordinal(date.today().toordinal() + (5 - date.today().weekday())).strftime("%B %w, %Y"))
-
+    # Create a value that is always the coming Saturday
     thisSaturdayAsDatetime = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
     
-    weekendingDateTimeFormat = thisSaturdayAsDatetime.strftime("%B %d, %Y")
+    weekendingDate = thisSaturdayAsDatetime.strftime("%B %d, %Y")
 
+    sundayHours = 12
+    mondayHours = 12
+    tuesdayHours = 12
+    wednesdayHours = 12
+    thursdayHours = 12
+    fridayHours = 12
+    saturdayHours = 0
+
+    
 
     createBoxRental()
