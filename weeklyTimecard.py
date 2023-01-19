@@ -99,7 +99,6 @@ def createTimeCard():
     output.write(outputStream)
     outputStream.close()
 
-
 if __name__ == "__main__":
     from PyPDF2 import PdfFileWriter, PdfFileReader
     import io
@@ -117,7 +116,7 @@ if __name__ == "__main__":
 
     sundayHours = 12
     mondayHours = 12
-    tuesdayHours = 12
+    tuesdayHours = 13
     wednesdayHours = 12
     thursdayHours = 12
     fridayHours = 12
@@ -146,4 +145,4 @@ if __name__ == "__main__":
     # print(weeklyHoursAsDateTime)
 
     createTimeCard()
-    # createBoxRental()
+    createBoxRental()
