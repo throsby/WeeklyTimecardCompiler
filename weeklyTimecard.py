@@ -1,5 +1,52 @@
 # Most of this is taken whole-cloth from "https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python"
+
+from PyPDF2 import PdfFileWriter, PdfFileReader
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+# If you want my SSN steal it from me in person
+from privateVariables import private_key
+from datetime import datetime, date, timedelta, time
+
+# Create a value that is always the coming Saturday
+thisSaturdayAsDatetime = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
+
+# Formats this Saturday as "Month DD, YYYY"
+weekendingDate = thisSaturdayAsDatetime.strftime("%B %d, %Y")
+
+sundayHours = 12
+mondayHours = 12
+tuesdayHours = 13
+wednesdayHours = 12
+thursdayHours = 12
+fridayHours = 12
+saturdayHours = 0
+
+# For clearer code to fix in a month or so, these are the datetimes of the week, as Datetimes
+sundayAsDatetime = thisSaturdayAsDatetime - timedelta(days=6)
+mondayAsDatetime = thisSaturdayAsDatetime - timedelta(days=5)
+tuesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=4)
+wednesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=3)
+thursdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=2)
+fridayAsDatetime = thisSaturdayAsDatetime - timedelta(days=1)
+saturdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=0)
+
+# For clearer code to fix in a month or so, these are the dates of the week, as ints
+sunday = thisSaturdayAsDatetime.day - 6
+monday = thisSaturdayAsDatetime.day - 5
+tuesday = thisSaturdayAsDatetime.day - 4
+wednesday = thisSaturdayAsDatetime.day - 3
+thursday = thisSaturdayAsDatetime.day - 2    
+friday = thisSaturdayAsDatetime.day - 1
+saturday = thisSaturdayAsDatetime.day - 0
+
+weeklyHoursAsDateTime = [(sundayHours, sundayAsDatetime), (mondayHours, mondayAsDatetime), (tuesdayHours, tuesdayAsDatetime), (wednesdayHours, wednesdayAsDatetime), (thursdayHours, thursdayAsDatetime), (fridayHours, fridayAsDatetime), (saturdayHours, saturdayAsDatetime)]
+
+
+
+
 def createBoxRental():
+    print("Creating Box Rental for {}".format(weekendingDate))
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
 
@@ -38,6 +85,7 @@ def createBoxRental():
     outputStream.close()
 
 def createTimeCard():
+    print("Creating TimeCard for {}".format(weekendingDate))
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
 
@@ -99,50 +147,7 @@ def createTimeCard():
     output.write(outputStream)
     outputStream.close()
 
-if __name__ == "__main__":
-    from PyPDF2 import PdfFileWriter, PdfFileReader
-    import io
-    from reportlab.pdfgen import canvas
-    from reportlab.lib.pagesizes import letter
-    # If you want my SSN steal it from me in person
-    from privateVariables import private_key
-    from datetime import datetime, date, timedelta, time
-
-    # Create a value that is always the coming Saturday
-    thisSaturdayAsDatetime = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
-    
-    # Formats this Saturday as "Month DD, YYYY"
-    weekendingDate = thisSaturdayAsDatetime.strftime("%B %d, %Y")
-
-    sundayHours = 12
-    mondayHours = 12
-    tuesdayHours = 13
-    wednesdayHours = 12
-    thursdayHours = 12
-    fridayHours = 12
-    saturdayHours = 0
-
-    # For clearer code to fix in a month or so, these are the datetimes of the week, as Datetimes
-    sundayAsDatetime = thisSaturdayAsDatetime - timedelta(days=6)
-    mondayAsDatetime = thisSaturdayAsDatetime - timedelta(days=5)
-    tuesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=4)
-    wednesdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=3)
-    thursdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=2)
-    fridayAsDatetime = thisSaturdayAsDatetime - timedelta(days=1)
-    saturdayAsDatetime = thisSaturdayAsDatetime - timedelta(days=0)
-
-    # For clearer code to fix in a month or so, these are the dates of the week, as ints
-    sunday = thisSaturdayAsDatetime.day - 6
-    monday = thisSaturdayAsDatetime.day - 5
-    tuesday = thisSaturdayAsDatetime.day - 4
-    wednesday = thisSaturdayAsDatetime.day - 3
-    thursday = thisSaturdayAsDatetime.day - 2    
-    friday = thisSaturdayAsDatetime.day - 1
-    saturday = thisSaturdayAsDatetime.day - 0
-
-    weeklyHoursAsDateTime = [(sundayHours, sundayAsDatetime), (mondayHours, mondayAsDatetime), (tuesdayHours, tuesdayAsDatetime), (wednesdayHours, wednesdayAsDatetime), (thursdayHours, thursdayAsDatetime), (fridayHours, fridayAsDatetime), (saturdayHours, saturdayAsDatetime)]
-
     # print(weeklyHoursAsDateTime)
-
+if __name__ == "__main__":
     createTimeCard()
     createBoxRental()
