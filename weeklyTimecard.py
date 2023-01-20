@@ -26,6 +26,7 @@ thursdayHours = 12
 fridayHours = 12
 saturdayHours = 0
 
+
 # For clearer code to fix in a month or so, these are the datetimes of the week, as Datetimes
 sundayAsDatetime = thisSaturdayAsDatetime - timedelta(days=6)
 mondayAsDatetime = thisSaturdayAsDatetime - timedelta(days=5)
