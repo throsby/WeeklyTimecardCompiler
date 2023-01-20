@@ -4,6 +4,8 @@ import weeklyTimecard as wT
 class App(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
+        self.master.title("TimeCard Completer")
+        self.master.maxsize(1000,500)
         self.pack()
 
         self.entrythingy = tk.Entry()
@@ -13,7 +15,7 @@ class App(tk.Frame):
         self.contents.set("this is a variable")
         
         self.entrythingy["textvariable"] = self.contents
-        self.entrythingy.bind('<Key-Return>', self.print_contents)
+        self.entrythingy.bind('<Key-m><Key-Return>', self.print_contents)
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
@@ -28,23 +30,26 @@ class App(tk.Frame):
         self.weekendingDateAsDatetime["textvariable"] = self.weekendingDate
 
         for pair in wT.weeklyHoursAsDateTime:
-            self.dayWorkedFrame = tk.Frame(master)
-            self.dayWorked = tk.Label(self.dayWorkedFrame, text=pair[1])
-            self.dayWorked.pack()
-            self.dayWorkedFrame.pack()
+            self.daysWorkedColumn = tk.Frame(master)
+            self.daysWorkedColumn.pack(side="top")
+            self.dayWorkedRow = tk.Label(self.daysWorkedColumn, text=pair[1])
+            self.dayWorkedRow.pack(side="left")
 
-            self.entry = tk.Entry(self.dayWorkedFrame)
-            self.entry["width"] = 20
+            self.entry = tk.Entry(self.daysWorkedColumn, width=3)
             self.entry.pack()
+
 
             self.hours = tk.StringVar()
             self.hours.set(pair[0])
             self.entry["textvariable"] = self.hours
             # self.hours.pack()
             # print(pair)
+        self.saveHoursButton = tk.Button(master, text="Save Hours Worked", command=self.saveHours)
+        self.saveHoursButton.pack()
 
         
     def print_contents(self, event):
+        print(event)
         print("Hi. The current event content is:", self.contents.get())
 
     def helloCallback(self):
@@ -57,14 +62,15 @@ class App(tk.Frame):
             self.but["text"] = "Change back"
             print("Button pressed!")
 
+    def saveHours(self):
+        self.master.focus_force()
+        print("Hours saved")
+
+
 
     
 
 root = tk.Tk()
 myapp = App(root)
-
-
-myapp.master.title("TimeCard Completer")
-myapp.master.maxsize(1000,1000)
 
 myapp.mainloop()

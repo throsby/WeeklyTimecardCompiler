@@ -1,4 +1,4 @@
-# Most of this is taken whole-cloth from "https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python"
+# The strategy of making a watermark to mask over the original pdf is taken whole-cloth from "https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python"
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import io
@@ -10,6 +10,10 @@ from datetime import datetime, date, timedelta, time
 
 # Create a value that is always the coming Saturday
 thisSaturdayAsDatetime = date.fromordinal(date.today().toordinal() + (5 - date.today().weekday()))
+
+boxrentalFilenameString = ""
+timecardFilenameString = ""
+
 
 # Formats this Saturday as "Month DD, YYYY"
 weekendingDate = thisSaturdayAsDatetime.strftime("%B %d, %Y")
@@ -42,16 +46,14 @@ saturday = thisSaturdayAsDatetime.day - 0
 
 weeklyHoursAsDateTime = [(sundayHours, sundayAsDatetime), (mondayHours, mondayAsDatetime), (tuesdayHours, tuesdayAsDatetime), (wednesdayHours, wednesdayAsDatetime), (thursdayHours, thursdayAsDatetime), (fridayHours, fridayAsDatetime), (saturdayHours, saturdayAsDatetime)]
 
-
-
-
 def createBoxRental():
     print("Creating Box Rental for {}".format(weekendingDate))
+    global boxrentalFilenameString
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
 
-    can.grid([x for x in range(700) if x % 20==0],[x for x in range(850) if x % 20==0])
-    can.grid([x+1 for x in range(700) if x % 100==0],[x+1 for x in range(850) if x % 100==0])
+    # can.grid([x for x in range(700) if x % 20==0],[x for x in range(850) if x % 20==0])
+    # can.grid([x+1 for x in range(700) if x % 100==0],[x+1 for x in range(850) if x % 100==0])
 
     # Location for Employee name
     can.drawString(135, 645, "Throsby Wells")
@@ -85,6 +87,7 @@ def createBoxRental():
     outputStream.close()
 
 def createTimeCard():
+    global timecardFilenameString
     print("Creating TimeCard for {}".format(weekendingDate))
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
@@ -142,12 +145,28 @@ def createTimeCard():
     output.addPage(page)
 
     # finally, write "output" to a real file
-    timecardFilenameString = datetime.strftime(thisSaturdayAsDatetime, "Timecard_-_Throsby_Wells_-_x%-m-%d-%Y.pdf")
-    outputStream = open("/Users/throsbywells/Desktop/TimeCards/{}".format(timecardFilenameString), "wb")
+    timecardFilenameString = datetime.strftime(thisSaturdayAsDatetime, "/Users/throsbywells/Desktop/TimeCards/Timecard_-_Throsby_Wells_-_x%-m-%d-%Y.pdf")
+    outputStream = open(timecardFilenameString, "wb")
     output.write(outputStream)
     outputStream.close()
 
-    # print(weeklyHoursAsDateTime)
+def mergeTCBR():
+    output = PdfFileWriter()
+    timecard = PdfFileReader(open(timecardFilenameString,"rb"))
+    boxrental = PdfFileReader(open(boxrentalFilenameString,"rb"))
+
+    timecardPage = timecard.getPage(0)
+    boxrentalPage = boxrental.getPage(0)
+
+    # page.mergePage(timecard.getPage(0))
+    output.addPage(boxrentalPage)
+    output.addPage(timecardPage)
+    outputStream = open(r"/Users/throsbywells/Desktop/MergedTCBR-PDFs/Throsby-Wells-w:e-{0}-{1}-{2} Combo.pdf".format(thisSaturdayAsDatetime.year,thisSaturdayAsDatetime.month,thisSaturdayAsDatetime.day), "wb")
+    output.write(outputStream)
+    outputStream.close()
+    print("Merging files done!")
+
 if __name__ == "__main__":
     createTimeCard()
     createBoxRental()
+    mergeTCBR()
