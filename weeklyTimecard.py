@@ -8,6 +8,7 @@ from reportlab.lib.pagesizes import letter
 from privateVariables import private_key
 from datetime import datetime, date, timedelta, time
 
+import pprint
 import json
 
 # Create a value that is always the coming Saturday
@@ -46,16 +47,49 @@ friday = thisSaturdayAsDatetime.day - 1
 saturday = thisSaturdayAsDatetime.day - 0
 
 workWeekAsDict = {
-    "sunday": {
+    "{}".format(sundayAsDatetime): {
         "Datetime": "{}".format(sundayAsDatetime),
-        
+        "day_of_the_week": "sunday",
+        "hours": 0
+    },
+    "{}".format(mondayAsDatetime): {
+        "Datetime": "{}".format(mondayAsDatetime),
+        "day_of_the_week": "monday",
+        "hours": 0
+    },
+    "{}".format(tuesdayAsDatetime): {
+        "Datetime": "{}".format(tuesdayAsDatetime),
+        "day_of_the_week": "tuesday",
+        "hours": 0
+    },
+    "{}".format(wednesdayAsDatetime): {
+        "Datetime": "{}".format(wednesdayAsDatetime),
+        "day_of_the_week": "wednesday",
+        "hours": 0
+    },
+    "{}".format(thursdayAsDatetime): {
+        "Datetime": "{}".format(thursdayAsDatetime),
+        "day_of_the_week": "thursday",
+        "hours": 0
+    },
+    "{}".format(fridayAsDatetime): {
+        "Datetime": "{}".format(fridayAsDatetime),
+        "day_of_the_week": "friday",
+        "hours": 0
+    },
+    "{}".format(saturdayAsDatetime): {
+        "Datetime": "{}".format(saturdayAsDatetime),
+        "day_of_the_week": "saturday",
+        "hours": 0
     }
 }
 
-workWeekAsJson = ''
 
+workWeekAsJson = json.dumps(workWeekAsDict)
+pprint.pprint(workWeekAsDict)
+print(workWeekAsDict.get("{}".format(sundayAsDatetime)))
 weeklyHoursAsDateTime = [(sundayHours, sundayAsDatetime), (mondayHours, mondayAsDatetime), (tuesdayHours, tuesdayAsDatetime), (wednesdayHours, wednesdayAsDatetime), (thursdayHours, thursdayAsDatetime), (fridayHours, fridayAsDatetime), (saturdayHours, saturdayAsDatetime)]
-weeklyHoursAsDateTimeAsJson = [(sundayHoursAsJson, sundayAsDatetime), (mondayHoursAsJson, mondayAsDatetime), (tuesdayHoursAsJson, tuesdayAsDatetime), (wednesdayHoursAsJson, wednesdayAsDatetime), (thursdayHoursAsJson, thursdayAsDatetime), (fridayHoursAsJson, fridayAsDatetime), (saturdayHoursAsJson, saturdayAsDatetime)]
+# weeklyHoursAsDateTimeAsJson = [(sundayHoursAsJson, sundayAsDatetime), (mondayHoursAsJson, mondayAsDatetime), (tuesdayHoursAsJson, tuesdayAsDatetime), (wednesdayHoursAsJson, wednesdayAsDatetime), (thursdayHoursAsJson, thursdayAsDatetime), (fridayHoursAsJson, fridayAsDatetime), (saturdayHoursAsJson, saturdayAsDatetime)]
 
 
 def createBoxRental():
@@ -233,6 +267,7 @@ def mergeTCBR():
     print("Merging files done!")
 
 if __name__ == "__main__":
-    createTimeCard(workWeekAsJson)
+    # createTimeCard(workWeekAsJson)
     # createBoxRental()
     # mergeTCBR()
+    print("done!")
