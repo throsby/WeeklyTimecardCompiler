@@ -1,12 +1,22 @@
 import tkinter as tk
 import weeklyTimecard as wT
+from datetime import datetime
+from tkinter import ttk
+import pprint
+
 
 class App(tk.Frame):
+    
     def __init__(self, master):
         super().__init__(master)
         self.master.title("TimeCard Completer")
         self.master.maxsize(1000,500)
         self.pack()
+
+        self.styler = ttk.Style()
+        self.styler.configure("TEntry", foreground='black')
+        # self.styler.map("TEntry", foreground=[('focussed')])
+
 
         self.entrythingy = tk.Entry()
         self.entrythingy.pack()
@@ -15,9 +25,9 @@ class App(tk.Frame):
         self.contents.set("this is a variable")
         
         self.entrythingy["textvariable"] = self.contents
-        self.entrythingy.bind('<Key-m><Key-Return>', self.print_contents)
+        self.entrythingy.bind('<Key-Return>', self.print_contents)
 
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
         self.weekendingDateAsDatetime = tk.Entry()
         self.weekendingDateAsDatetime.pack()
@@ -29,27 +39,46 @@ class App(tk.Frame):
 
         self.weekendingDateAsDatetime["textvariable"] = self.weekendingDate
 
-        for pair in wT.weeklyHoursAsDateTime:
+        # print(iter(wT.workWeekAsDict.values()))
+        self.daysList = []
+        self.hoursList = []
+        for day in wT.workWeekAsDict.values():
+            print("The day: ", day)
             self.daysWorkedColumn = tk.Frame(master)
-            self.daysWorkedColumn.pack(side="top")
-            self.dayWorkedRow = tk.Label(self.daysWorkedColumn, text=pair[1])
+
+            # Anchor aligns the dates to right "east" 
+            self.daysWorkedColumn.pack(side="top", anchor="e")
+            self.dayWorkedRow = tk.Label(self.daysWorkedColumn, text=datetime.strftime(datetime.fromisoformat(day["Datetime"]), "%A %B %-d, %Y"))
             self.dayWorkedRow.pack(side="left")
 
-            self.entry = tk.Entry(self.daysWorkedColumn, width=3)
+            # print(self.daysWorkedColumn.configure())
+
+            self.entry = tk.Entry(self.daysWorkedColumn, width=3, foreground='grey', name=datetime.strftime(datetime.fromisoformat(day["Datetime"]), "entry%Y_%m_%d"))
+            self.entry.bind("<FocusIn>", self.changeToFocus)
+            self.daysList.append(self.entry)
+
             self.entry.pack()
 
-
             self.hours = tk.StringVar()
-            self.hours.set(pair[0])
+            self.hoursList.append(self.hours)
+            self.hours.set(day["hours"])
             self.entry["textvariable"] = self.hours
-            # self.hours.pack()
-            # print(pair)
-        self.saveHoursButton = tk.Button(master, text="Save Hours Worked", command=self.saveHours)
-        self.saveHoursButton.pack()
 
-        
+        print(self.daysList)
+
+        self.saveHoursButton = tk.Button(master, text="Save Hours Worked")
+        self.saveHoursButton.bind("<Button>",self.saveHours)
+        self.saveHoursButton.pack()
+    
+    def changeToFocus(self, event):
+        # print(event.widget)
+        # event.widget.configure(foreground='black')
+        for day in self.daysList:
+            day.configure(foreground='black')
+        self.saveHoursButton.configure(foreground='black')
+
     def print_contents(self, event):
-        print(event)
+        print(event)        
         print("Hi. The current event content is:", self.contents.get())
 
     def helloCallback(self):
@@ -62,8 +91,15 @@ class App(tk.Frame):
             self.but["text"] = "Change back"
             print("Button pressed!")
 
-    def saveHours(self):
+    def saveHours(self, event):
         self.master.focus_force()
+        print(self.daysList)
+        print("Widget: ", event.widget)
+        for day in self.daysList:
+            day.configure(foreground='grey')
+        print(event.widget.configure(foreground='grey'))
+        for hour in self.hoursList:
+            print(hour.get())
         print("Hours saved")
 
 

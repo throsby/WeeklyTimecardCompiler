@@ -49,45 +49,49 @@ saturday = thisSaturdayAsDatetime.day - 0
 workWeekAsDict = {
     "{}".format(sundayAsDatetime): {
         "Datetime": "{}".format(sundayAsDatetime),
-        "day_of_the_week": "sunday",
-        "hours": 0
+        "day_of_the_week": "Sunday",
+        "hours": 12
     },
     "{}".format(mondayAsDatetime): {
         "Datetime": "{}".format(mondayAsDatetime),
-        "day_of_the_week": "monday",
-        "hours": 0
+        "day_of_the_week": "Monday",
+        "hours": 12
     },
     "{}".format(tuesdayAsDatetime): {
         "Datetime": "{}".format(tuesdayAsDatetime),
-        "day_of_the_week": "tuesday",
-        "hours": 0
+        "day_of_the_week": "Tuesday",
+        "hours": 13
     },
     "{}".format(wednesdayAsDatetime): {
         "Datetime": "{}".format(wednesdayAsDatetime),
-        "day_of_the_week": "wednesday",
-        "hours": 0
+        "day_of_the_week": "Wednesday",
+        "hours": 12
     },
     "{}".format(thursdayAsDatetime): {
         "Datetime": "{}".format(thursdayAsDatetime),
-        "day_of_the_week": "thursday",
-        "hours": 0
+        "day_of_the_week": "Thursday",
+        "hours": 12
     },
     "{}".format(fridayAsDatetime): {
         "Datetime": "{}".format(fridayAsDatetime),
-        "day_of_the_week": "friday",
-        "hours": 0
+        "day_of_the_week": "Friday",
+        "hours": 12
     },
     "{}".format(saturdayAsDatetime): {
         "Datetime": "{}".format(saturdayAsDatetime),
-        "day_of_the_week": "saturday",
+        "day_of_the_week": "Saturday",
         "hours": 0
     }
 }
 
 
 workWeekAsJson = json.dumps(workWeekAsDict)
-pprint.pprint(workWeekAsDict)
-print(workWeekAsDict.get("{}".format(sundayAsDatetime)))
+
+
+# pprint.pprint(workWeekAsDict)
+# print(workWeekAsDict.get("{}".format(sundayAsDatetime)))
+
+
 weeklyHoursAsDateTime = [(sundayHours, sundayAsDatetime), (mondayHours, mondayAsDatetime), (tuesdayHours, tuesdayAsDatetime), (wednesdayHours, wednesdayAsDatetime), (thursdayHours, thursdayAsDatetime), (fridayHours, fridayAsDatetime), (saturdayHours, saturdayAsDatetime)]
 # weeklyHoursAsDateTimeAsJson = [(sundayHoursAsJson, sundayAsDatetime), (mondayHoursAsJson, mondayAsDatetime), (tuesdayHoursAsJson, tuesdayAsDatetime), (wednesdayHoursAsJson, wednesdayAsDatetime), (thursdayHoursAsJson, thursdayAsDatetime), (fridayHoursAsJson, fridayAsDatetime), (saturdayHoursAsJson, saturdayAsDatetime)]
 
