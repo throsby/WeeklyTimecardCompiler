@@ -2,7 +2,12 @@ import tkinter as tk
 import weeklyTimecard as wT
 from datetime import datetime
 from tkinter import ttk
-import pprint
+from tkinter import filedialog as fd
+from tkinter.filedialog import askopenfile
+from PIL import Image, ImageTk
+import PyPDF2
+
+
 
 
 class App(tk.Frame):
@@ -42,9 +47,14 @@ class App(tk.Frame):
         # print(iter(wT.workWeekAsDict.values()))
         self.daysList = []
         self.hoursList = []
+        self.workDaysColumn = tk.Frame(master, width=400, height=150, highlightbackground="blue", highlightthickness=2)
+        self.workDaysColumn.pack(side="left")
+        self.pdfView = tk.Frame(master, width=800, height=300 , highlightbackground="blue", highlightthickness=2)
+        self.pdfView.pack(side="left")
+
         for day in wT.workWeekAsDict.values():
             print("The day: ", day)
-            self.daysWorkedColumn = tk.Frame(master)
+            self.daysWorkedColumn = tk.Frame(self.workDaysColumn)
 
             # Anchor aligns the dates to right "east" 
             self.daysWorkedColumn.pack(side="top", anchor="e")
@@ -66,10 +76,15 @@ class App(tk.Frame):
 
         print(self.daysList)
 
-        self.saveHoursButton = tk.Button(master, text="Save Hours Worked")
+
+
+        self.saveHoursButton = tk.Button(self.workDaysColumn, text="Save Hours Worked")
         self.saveHoursButton.bind("<Button>",self.saveHours)
         self.saveHoursButton.pack()
-    
+
+
+
+
     def changeToFocus(self, event):
         # print(event.widget)
         # event.widget.configure(foreground='black')
@@ -107,6 +122,8 @@ class App(tk.Frame):
     
 
 root = tk.Tk()
+root.geometry("1100x800")
 myapp = App(root)
+
 
 myapp.mainloop()
