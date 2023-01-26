@@ -85,6 +85,7 @@ class App(tk.Frame):
 
 
 
+
     def changeToFocus(self, event):
         # print(event.widget)
         # event.widget.configure(foreground='black')
