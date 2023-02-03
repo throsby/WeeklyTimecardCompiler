@@ -16,7 +16,7 @@ class App(tk.Frame):
         super().__init__(master)
         self.master.title("TimeCard Completer")
         self.master.maxsize(1000,500)
-        self.pack()
+        self.pack(padx=20,pady=20)
 
         self.styler = ttk.Style()
         self.styler.configure("TEntry", foreground='black')
@@ -74,7 +74,7 @@ class App(tk.Frame):
             self.hours.set(day["hours"])
             self.entry["textvariable"] = self.hours
 
-        print(self.daysList)
+        # print(self.daysList)
 
 
 

@@ -1,6 +1,6 @@
 # The strategy of making a watermark to mask over the original pdf is taken whole-cloth from "https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python"
 
-from PyPDF2 import PdfFileWriter, PdfFileReader
+from PyPDF2 import PdfWriter, PdfReader
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
@@ -118,14 +118,14 @@ def createBoxRental():
     can.save()
 
     # create a new PDF with Reportlab
-    new_pdf = PdfFileReader(packet)
+    new_pdf = PdfReader(packet)
     # read your existing PDF
-    existing_pdf = PdfFileReader(open(r"/Users/throsbywells/Desktop/Kanan Season 3 Box Rental Forms/S3 Box Rental w:e 000000.pdf", "rb"))
-    output = PdfFileWriter()
+    existing_pdf = PdfReader(open(r"/Users/throsbywells/Desktop/Kanan Season 3 Box Rental Forms/S3 Box Rental w:e 000000.pdf", "rb"))
+    output = PdfWriter()
     # add the "watermark" (which is the new pdf) on the existing page
-    page = existing_pdf.getPage(0)
-    page.mergePage(new_pdf.getPage(0))
-    output.addPage(page)
+    page = existing_pdf.pages[0]
+    page.merge_page(new_pdf.pages[0])
+    output.add_page(page)
     # finally, write "output" to a real file
     boxrentalFilenameString = r"/Users/throsbywells/Desktop/Kanan Season 3 Box Rental Forms/S3 Box Rental w:e {0}-{1}-{2}.pdf".format(thisSaturdayAsDatetime.year,thisSaturdayAsDatetime.month,thisSaturdayAsDatetime.day)
     # print(boxrentalFilenameString)
@@ -181,15 +181,15 @@ def createTimeCard():
     can.save()
 
     # create a new PDF with Reportlab
-    new_pdf = PdfFileReader(packet)
+    new_pdf = PdfReader(packet)
 
     # read your existing PDF
-    existing_pdf = PdfFileReader(open(r"/Users/throsbywells/Desktop/TimeCards/BlankTimeCard.pdf", "rb"))
-    output = PdfFileWriter()
+    existing_pdf = PdfReader(open(r"/Users/throsbywells/Desktop/TimeCards/BlankTimeCard.pdf", "rb"))
+    output = PdfWriter()
     # add the "watermark" (which is the new pdf) on the existing page
-    page = existing_pdf.getPage(0)
-    page.mergePage(new_pdf.getPage(0))
-    output.addPage(page)
+    page = existing_pdf.pages[0]
+    page.merge_page(new_pdf.pages[0])
+    output.add_page(page)
 
     # finally, write "output" to a real file
     timecardFilenameString = datetime.strftime(thisSaturdayAsDatetime, "/Users/throsbywells/Desktop/TimeCards/Timecard_-_Throsby_Wells_-_x%-m-%d-%Y.pdf")
@@ -197,81 +197,82 @@ def createTimeCard():
     output.write(outputStream)
     outputStream.close()
 
-def createTimeCard(workWeekAsJson):
-    global timecardFilenameString
-    print("Creating TimeCard for {}".format(weekendingDate))
-    packet = io.BytesIO()
-    can = canvas.Canvas(packet, pagesize=letter)
+# def createTimeCard(workWeekAsJson):
+#     global timecardFilenameString
+#     print("Creating TimeCard for {}".format(weekendingDate))
+#     packet = io.BytesIO()
+#     can = canvas.Canvas(packet, pagesize=letter)
 
-    # Location of name
-    can.drawString(30, 505, "Throsby Wells")
-    # Location of private key
-    can.drawString(290, 505, private_key)
-    # Location of guaranteed hours
-    can.drawString(455, 530, "12")
-    # Location of guaranteed rate
-    can.drawString(525, 530, "21.42/hour")
-    # Location of weekending
-    can.drawString(615, 530, weekendingDate)
-    # Location of job title
-    can.drawString(455, 505, "HS Coordinator")
-    # Location of meal allowance
-    can.drawString(90, 192, "$15/day")
+#     # Location of name
+#     can.drawString(30, 505, "Throsby Wells")
+#     # Location of private key
+#     can.drawString(290, 505, private_key)
+#     # Location of guaranteed hours
+#     can.drawString(455, 530, "12")
+#     # Location of guaranteed rate
+#     can.drawString(525, 530, "21.42/hour")
+#     # Location of weekending
+#     can.drawString(615, 530, weekendingDate)
+#     # Location of job title
+#     can.drawString(455, 505, "HS Coordinator")
+#     # Location of meal allowance
+#     can.drawString(90, 192, "$15/day")
 
 
-    daysOfWeekWorked = 0
-    for pair in weeklyHoursAsDateTime:
-        if (pair[0] != 0):
-            # Creates the different lines for times and dates
-            can.setFontSize(12)
-            can.drawString(23, 430 - daysOfWeekWorked, "NY   NY")
-            can.setFontSize(10)
-            can.drawString(120, 430 - daysOfWeekWorked, "{0}/{1}/{2}".format(pair[1].month, pair[1].day, pair[1].year))
-            # The endtime of work. Starting at 1:30PM to make lunch easier - adds the time worked for the respective day as time delta and combines the day worked with the hours worked
-            endOfWorkAsDatetime = datetime.combine(pair[1], time(13, 30)) + timedelta(seconds=pair[0]*60*60)
-            # print(datetime.strftime(endOfWorkAsDatetime, "%-H:%M%p"))
+#     daysOfWeekWorked = 0
+#     for pair in weeklyHoursAsDateTime:
+#         if (pair[0] != 0):
+#             # Creates the different lines for times and dates
+#             can.setFontSize(12)
+#             can.drawString(23, 430 - daysOfWeekWorked, "NY   NY")
+#             can.setFontSize(10)
+#             can.drawString(120, 430 - daysOfWeekWorked, "{0}/{1}/{2}".format(pair[1].month, pair[1].day, pair[1].year))
+#             # The endtime of work. Starting at 1:30PM to make lunch easier - adds the time worked for the respective day as time delta and combines the day worked with the hours worked
+#             endOfWorkAsDatetime = datetime.combine(pair[1], time(13, 30)) + timedelta(seconds=pair[0]*60*60)
+#             # print(datetime.strftime(endOfWorkAsDatetime, "%-H:%M%p"))
 
-            can.drawString(191, 430 - daysOfWeekWorked, "1P     7P    7:30  {hours}".format(hours=datetime.strftime(endOfWorkAsDatetime, "%-H:%M%p")))
-            daysOfWeekWorked = daysOfWeekWorked + 23
+#             can.drawString(191, 430 - daysOfWeekWorked, "1P     7P    7:30  {hours}".format(hours=datetime.strftime(endOfWorkAsDatetime, "%-H:%M%p")))
+#             daysOfWeekWorked = daysOfWeekWorked + 23
 
-    can.save()
+#     can.save()
 
-    # create a new PDF with Reportlab
-    new_pdf = PdfFileReader(packet)
+#     # create a new PDF with Reportlab
+#     new_pdf = PdfReader(packet)
 
-    # read your existing PDF
-    existing_pdf = PdfFileReader(open(r"/Users/throsbywells/Desktop/TimeCards/BlankTimeCard.pdf", "rb"))
-    output = PdfFileWriter()
-    # add the "watermark" (which is the new pdf) on the existing page
-    page = existing_pdf.getPage(0)
-    page.mergePage(new_pdf.getPage(0))
-    output.addPage(page)
+#     # read your existing PDF
+#     existing_pdf = PdfReader(open(r"/Users/throsbywells/Desktop/TimeCards/BlankTimeCard.pdf", "rb"))
+#     output = PdfWriter()
+#     # add the "watermark" (which is the new pdf) on the existing page
+#     page = existing_pdf.pages[0])
+#     page.merge_page(new_pdf.pages[0]))
+#     output.add_page(page)
 
-    # finally, write "output" to a real file
-    timecardFilenameString = datetime.strftime(thisSaturdayAsDatetime, "/Users/throsbywells/Desktop/TimeCards/Timecard_-_Throsby_Wells_-_x%-m-%d-%Y.pdf")
-    outputStream = open(timecardFilenameString, "wb")
-    output.write(outputStream)
-    outputStream.close()
+#     # finally, write "output" to a real file
+#     timecardFilenameString = datetime.strftime(thisSaturdayAsDatetime, "/Users/throsbywells/Desktop/TimeCards/Timecard_-_Throsby_Wells_-_x%-m-%d-%Y.pdf")
+#     outputStream = open(timecardFilenameString, "wb")
+#     output.write(outputStream)
+#     outputStream.close()
 
 
 def mergeTCBR():
-    output = PdfFileWriter()
-    timecard = PdfFileReader(open(timecardFilenameString,"rb"))
-    boxrental = PdfFileReader(open(boxrentalFilenameString,"rb"))
+    output = PdfWriter()
+    timecard = PdfReader(open(timecardFilenameString,"rb"))
+    boxrental = PdfReader(open(boxrentalFilenameString,"rb"))
 
-    timecardPage = timecard.getPage(0)
-    boxrentalPage = boxrental.getPage(0)
+    timecardPage = timecard.pages[0]
+    boxrentalPage = boxrental.pages[0]
 
-    # page.mergePage(timecard.getPage(0))
-    output.addPage(boxrentalPage)
-    output.addPage(timecardPage)
+    # page.merge_page(timecard.pages[0])
+    output.add_page(boxrentalPage)
+    output.add_page(timecardPage)
     outputStream = open(r"/Users/throsbywells/Desktop/MergedTCBR-PDFs/Throsby-Wells-w:e-{0}-{1}-{2} Combo.pdf".format(thisSaturdayAsDatetime.year,thisSaturdayAsDatetime.month,thisSaturdayAsDatetime.day), "wb")
     output.write(outputStream)
     outputStream.close()
     print("Merging files done!")
 
 if __name__ == "__main__":
+    createTimeCard()
     # createTimeCard(workWeekAsJson)
-    # createBoxRental()
-    # mergeTCBR()
+    createBoxRental()
+    mergeTCBR()
     print("done!")
