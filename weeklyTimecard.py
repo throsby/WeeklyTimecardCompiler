@@ -1,4 +1,10 @@
 # The strategy of making a watermark to mask over the original pdf is taken whole-cloth from "https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python"
+import os
+try:
+    print(os.environ['CONDA_DEFAULT_ENV'])
+except KeyError:
+    print("\n\n  >>  You're not using the correct virtual envrionment. Throsby, if you're running this on your desktop, please run 'conda activate base' to run this application properly.\n\n")
+
 
 from PyPDF2 import PdfWriter, PdfReader
 import io
@@ -22,7 +28,7 @@ weekendingDate = thisSaturdayAsDatetime.strftime("%B %d, %Y")
 
 sundayHours = 12
 mondayHours = 12
-tuesdayHours = 13
+tuesdayHours = 12
 wednesdayHours = 12
 thursdayHours = 12
 fridayHours = 12
@@ -108,7 +114,7 @@ def createBoxRental():
     can.drawString(425, 645, private_key)
 
     # Location for the weekly box rental rate
-    can.drawString(150, 568, "$15/week")
+    can.drawString(150, 568, "$15/day")
 
     # Location for signature date
     can.drawString(360, 175, weekendingDate)
