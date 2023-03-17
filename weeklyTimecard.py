@@ -1,7 +1,7 @@
 # The strategy of making a watermark to mask over the original pdf is taken whole-cloth from "https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python"
 import os
 try:
-    print(os.environ['CONDA_DEFAULT_ENV'])
+    os.environ['CONDA_DEFAULT_ENV']
 except KeyError:
     print("\n\n  >>  You're not using the correct virtual envrionment. Throsby, if you're running this on your desktop, please run 'conda activate base' to run this application properly.\n\n")
 
@@ -66,7 +66,7 @@ workWeekAsDict = {
     "{}".format(tuesdayAsDatetime): {
         "Datetime": "{}".format(tuesdayAsDatetime),
         "day_of_the_week": "Tuesday",
-        "hours": 13
+        "hours": 12
     },
     "{}".format(wednesdayAsDatetime): {
         "Datetime": "{}".format(wednesdayAsDatetime),

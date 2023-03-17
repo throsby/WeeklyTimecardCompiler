@@ -73,6 +73,8 @@ class App(tk.Frame):
             self.hoursList.append(self.hours)
             self.hours.set(day["hours"])
             self.entry["textvariable"] = self.hours
+            
+            
 
         # print(self.daysList)
 
