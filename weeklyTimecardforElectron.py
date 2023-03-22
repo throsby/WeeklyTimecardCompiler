@@ -97,6 +97,10 @@ workWeekAsJson = json.dumps(workWeekAsDict)
 pprint.pprint(workWeekAsJson)
 print("\n",workWeekAsJson,"\n")
 
+with open("./workdatescalendar.json","w") as outfile:
+    outfile.write(workWeekAsJson)
+
+
 # print(workWeekAsDict.get("{}".format(sundayAsDatetime)))
 
 

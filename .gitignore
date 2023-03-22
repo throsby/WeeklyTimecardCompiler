@@ -1,3 +1,4 @@
 *.pdf
 privateVariables.py
+*.json
 **/__pycache__/
