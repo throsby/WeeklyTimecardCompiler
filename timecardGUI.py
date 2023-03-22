@@ -7,6 +7,9 @@ from tkinter.filedialog import askopenfile
 from PIL import Image, ImageTk
 import PyPDF2
 
+from pdf2image import convert_from_path
+ 
+ 
 
 
 
